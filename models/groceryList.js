@@ -11,9 +11,10 @@ const GroceryListSchema = new mongoose.Schema({
   general: [],
   alcohol: [],
   drinks: [],
-  dryGoods: [],  
+  dryGoods: [],
+  createdBy: String
 });
 
 
 
-module.exports = mongoose.model('List', GroceryListSchema);
+module.exports = mongoose.model('GroceryList', GroceryListSchema);
