@@ -5,6 +5,7 @@ const session = require('express-session');
 const cors = require('cors');
 
 const authController = require('./controllers/authController');
+const groceryListController = require('./controllers/groceryListController');
 
 require('./db/db');
 
@@ -28,6 +29,7 @@ app.use(cors(corsOptions));
 
 
 app.use('/auth', authController);
+app.use('/', groceryListController);
 
 
 app.listen(process.env.PORT || 9000, () => {
