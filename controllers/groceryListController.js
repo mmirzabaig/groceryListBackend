@@ -9,7 +9,7 @@ router.post('/create', async (req, res) => {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
       const createdList = await GroceryList.create(req.body);
-  console.log(createdList);
+      console.log(createdList);
       res.json({
         status: 200,
         data: createdList._id
@@ -27,12 +27,12 @@ router.post('/create', async (req, res) => {
 })
 
 router.get('/findLists', async (req, res) => {
-  console.log('it wrks        s')
+  console.log(req.session, 'IT WORKS ')
   try {
 
     if (req.session.logged) {
-
-      const foundLists = await GroceryList.find({'createdBy': req.session.username});
+      console.log('poop');
+      const foundLists = await GroceryList.find({createdBy: req.session.username});
       console.log(foundLists);
       res.json({
         status: 200,
@@ -62,6 +62,8 @@ router.get('/:id', async (req, res) => {
     console.log(err);
   }
 })
+
+
 
 
 module.exports = router;
