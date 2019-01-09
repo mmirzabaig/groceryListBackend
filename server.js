@@ -4,15 +4,17 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
 
+require('./db/db');
+
+
 const authController = require('./controllers/authController');
 const groceryListController = require('./controllers/groceryListController');
 
-require('./db/db');
 
 app.use(session({
   secret: 'coffee mud',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 }))
 
 app.use(bodyParser.urlencoded({ extended: false }));

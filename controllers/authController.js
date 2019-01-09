@@ -19,8 +19,8 @@ router.post('/register', async (req, res) => {
     const createdUser = await User.create(userEntry);
     console.log(createdUser, 'MongoDB data');
 
+    req.session.cookie.username = req.body.username;
     req.session.logged = true;
-    req.session.username = req.body.username;
     req.session.save();
 
 
