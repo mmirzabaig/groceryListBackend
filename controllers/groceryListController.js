@@ -26,6 +26,18 @@ router.post('/create', async (req, res) => {
   }
 })
 
+router.post('/addItem', async (req, res) => {
+  console.log('LIST FOUND', req.body);
+  try{
+    const findList = await GroceryList.findById(req.body._id);
+    console.log(findList, 'LIST FOUND')
+
+  } catch(err) {
+    console.log(err)
+  }
+})
+
+
 router.get('/findLists', async (req, res) => {
   console.log(req.session, 'IT WORKS ')
   try {
