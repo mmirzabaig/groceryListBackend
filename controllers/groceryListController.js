@@ -36,7 +36,7 @@ router.get('/findLists', async (req, res) => {
       console.log(foundLists);
       res.json({
         status: 200,
-        data: 'found lists'
+        data: foundLists
       })
     } else {
       res.json({
