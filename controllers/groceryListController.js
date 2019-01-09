@@ -31,12 +31,20 @@ router.post('/addItem', async (req, res) => {
   try{
     const findList = await GroceryList.findById(req.body._id);
     console.log(findList, 'LIST FOUND')
-
+    const a = req.body;
+    const b = findList;
+    for (let i in b) {
+      if (a.category === i) {
+        b[i].push(a.name)
+        console.log(b);
+        b.save();
+        return b;
+      }
+    }
   } catch(err) {
     console.log(err)
   }
 })
-
 
 router.get('/findLists', async (req, res) => {
   console.log(req.session, 'IT WORKS ')
