@@ -34,7 +34,9 @@ router.post('/addItem', async (req, res) => {
     const a = req.body;
     const b = findList;
     for (let i in b) {
-      if (a.category === i) {
+      if (a.category === i && !b[i].includes(a.name)) {
+        console.log(b[i].includes('Pete'));
+        console.log(b[i], 'MIRZA');
         b[i].push(a.name)
         console.log(b);
         b.save();
