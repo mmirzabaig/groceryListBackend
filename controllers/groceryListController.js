@@ -25,6 +25,23 @@ router.post('/create', async (req, res) => {
     console.log(err);
   }
 })
+router.post('/deleteItem', async (req, res) => {
+  console.log(req.body, 'MIRZA')
+  try {
+    const deleteItem = await GroceryList.findById(req.body.id);
+    console.log(deleteItem, 'Delete Item LIST Found ')
+    for (let key in deleteItem) {
+      if(key === req.body.category) {
+        let index = deleteItem[key].indexOf(req.body.item);
+        deleteItem[key].splice(index, 1);
+        deleteItem.save();
+        console.log(deleteItem);
+      }
+    }
+  } catch (err) {
+    console.log(err.message)
+  }
+})
 
 router.post('/addItem', async (req, res) => {
   console.log('LIST FOUND', req.body);
@@ -43,6 +60,10 @@ router.post('/addItem', async (req, res) => {
         return b;
       }
     }
+    res.json({
+      status: 200,
+      data: 'added Item'
+    })
   } catch(err) {
     console.log(err)
   }
