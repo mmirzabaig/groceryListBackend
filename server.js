@@ -3,19 +3,24 @@ const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
 
 require('./db/db');
-
+require('./config/passport');
+require('dotenv').config();
 
 const authController = require('./controllers/authController');
 const groceryListController = require('./controllers/groceryListController');
 
-
+app.use(cookieParser());
 app.use(session({
   secret: 'coffee mud',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
 }))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
