@@ -93,21 +93,6 @@ router.get('/findLists', async (req, res) => {
   }
 })
 
-router.post('/deleteItem', (req, res) => {
-  console.log(req.body, '123455425347891739812379813275')
-  // try {
-  //   const deletedItem = await GroceryList.findByIdAndUpdate(req.body.id);
-  //   console.log(req.body.id);
-  //   res.json({
-  //     status: 200,
-  //     data: deletedItem
-  //   });
-  //
-  // } catch(err) {
-  //   console.log(err);
-  // }
-})
-
 router.get('/:id', async (req, res) => {
   console.log(req.params.id, 'get list request');
   try {
@@ -120,8 +105,6 @@ router.get('/:id', async (req, res) => {
     console.log(err);
   }
 })
-
-
 
 
 
