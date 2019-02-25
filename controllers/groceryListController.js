@@ -25,6 +25,8 @@ router.post('/create', async (req, res) => {
     console.log(err);
   }
 })
+
+//Delete Item
 router.post('/deleteItem', async (req, res) => {
   console.log(req.body, 'MIRZA')
   try {
@@ -42,6 +44,20 @@ router.post('/deleteItem', async (req, res) => {
     console.log(err.message)
   }
 })
+
+// Delete List
+router.delete('/:id', async (req, res) => {
+  try {
+     const deletedList = await deletedList.findByIdAndRemove(req.params.id);
+     console.log(deleteddeletedList, ' this is deleted');
+      res.json({
+        status: 200,
+        data: deleteddeletedList
+      });
+  } catch(err){
+    res.send(err);
+  }
+});
 
 router.post('/addItem', async (req, res) => {
   console.log('LIST FOUND', req.body);
