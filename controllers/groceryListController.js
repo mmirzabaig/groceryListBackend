@@ -47,13 +47,15 @@ router.post('/deleteItem', async (req, res) => {
 
 // Delete List
 router.delete('/:id', async (req, res) => {
+  console.log(req.params.id, '1g23456789');
   try {
-     const deletedList = await deletedList.findByIdAndRemove(req.params.id);
-     console.log(deleteddeletedList, ' this is deleted');
-      res.json({
-        status: 200,
-        data: deleteddeletedList
-      });
+     const deletedList = await GroceryList.findByIdAndRemove(req.params.id);
+     console.log(deletedList, ' this is deleted');
+     res.json({
+            status: 200,
+            data: deletedList
+          });
+
   } catch(err){
     res.send(err);
   }
