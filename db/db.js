@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const connectionString = 'mongodb://wdi:abc123@ds053954.mongolab.com:53954/wdi-students';
+const connectionString = 'mongodb://localhost/groceryList';
+
 
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
