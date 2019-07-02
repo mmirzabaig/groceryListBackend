@@ -26,6 +26,30 @@ router.post('/create', async (req, res) => {
   }
 })
 
+//change color
+router.post('/listColor', (req, res) => {
+  console.log(req);
+  // try {
+  //   if (req.session.logged) {
+  //     req.body.createdBy = req.session.username;
+  //     const updatedList = await GroceryList.findByIdAndUpdate(req.body);
+  //     console.log(updatedList);
+  //     // res.json({
+  //     //   status: 200,
+  //     //   data: createdList._id
+  //     // })
+  //   // } else {
+  //   //   res.json({
+  //   //     status: 200,
+  //   //     data: 'Log in required'
+  //   //   })
+  //   }
+  //
+  // } catch (err) {
+  //   console.log(err);
+  // }
+})
+
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
   console.log(req.body, 'MIRZA')

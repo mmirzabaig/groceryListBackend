@@ -12,7 +12,8 @@ const GroceryListSchema = new mongoose.Schema({
   alcohol: [],
   drinks: [],
   dryGoods: [],
-  createdBy: String
+  createdBy: String,
+  color: String
 });
 
 
