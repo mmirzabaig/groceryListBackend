@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
 
+router.post('/listcolor', async (req, res) => {
+  console.log(req.body)
+  const updateColor = await GroceryList.findByIdAndUpdate(req.body.listID);
+ updateColor.color = req.body.color;
+  await updateColor.save();
+  await console.log(updateColor)
+
+})
+
 router.post('/create', async (req, res) => {
   console.log(req.session);
   try {
@@ -27,28 +36,28 @@ router.post('/create', async (req, res) => {
 })
 
 //change color
-router.post('/listColor', (req, res) => {
-  console.log(req);
-  // try {
-  //   if (req.session.logged) {
-  //     req.body.createdBy = req.session.username;
-  //     const updatedList = await GroceryList.findByIdAndUpdate(req.body);
-  //     console.log(updatedList);
-  //     // res.json({
-  //     //   status: 200,
-  //     //   data: createdList._id
-  //     // })
-  //   // } else {
-  //   //   res.json({
-  //   //     status: 200,
-  //   //     data: 'Log in required'
-  //   //   })
-  //   }
-  //
-  // } catch (err) {
-  //   console.log(err);
-  // }
-})
+// router.post('/listColor', (req, res) => {
+//   console.log(req);
+//   // try {
+//   //   if (req.session.logged) {
+//   //     req.body.createdBy = req.session.username;
+//   //     const updatedList = await GroceryList.findByIdAndUpdate(req.body);
+//   //     console.log(updatedList);
+//   //     // res.json({
+//   //     //   status: 200,
+//   //     //   data: createdList._id
+//   //     // })
+//   //   // } else {
+//   //   //   res.json({
+//   //   //     status: 200,
+//   //   //     data: 'Log in required'
+//   //   //   })
+//   //   }
+//   //
+//   // } catch (err) {
+//   //   console.log(err);
+//   // }
+// })
 
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
