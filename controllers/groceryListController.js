@@ -5,11 +5,18 @@ const GroceryList = require('../models/groceryList');
 router.post('/listcolor', async (req, res) => {
   console.log(req.body)
   const updateColor = await GroceryList.findByIdAndUpdate(req.body.listID);
- updateColor.color = req.body.color;
+  updateColor.color = req.body.color;
   await updateColor.save();
   await console.log(updateColor)
 
 })
+
+// router.post('/edit', async(req, res) => {
+//     const editList = await GroceryList.findByIdAndUpdate(req.body.listID);
+//     editList.name = req.body.name;
+//     await editList.save();
+//     await console.log(editList);
+// })
 
 router.post('/create', async (req, res) => {
   console.log(req.session);
