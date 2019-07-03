@@ -11,12 +11,15 @@ router.post('/listcolor', async (req, res) => {
 
 })
 
-// router.post('/edit', async(req, res) => {
-//     const editList = await GroceryList.findByIdAndUpdate(req.body.listID);
-//     editList.name = req.body.name;
-//     await editList.save();
-//     await console.log(editList);
-// })
+router.post('/edit', async(req, res) => {
+  console.log(req.body)
+
+    const editList = await GroceryList.findByIdAndUpdate(req.body.listID);
+    editList.name = req.body.name;
+    await editList.save();
+    await console.log(editList);
+    res.status(200).json({messgae: 'Successfull!'})
+})
 
 router.post('/create', async (req, res) => {
   console.log(req.session);
