@@ -2,29 +2,27 @@ const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
 
+//Create List Color
 router.post('/listcolor', async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   const updateColor = await GroceryList.findByIdAndUpdate(req.body.listID);
   updateColor.color = req.body.color;
   await updateColor.save();
-  await console.log(updateColor)
 
 })
 
+//Edit List Name
 router.post('/edit', async(req, res) => {
-  console.log(req.body)
-
     const editList = await GroceryList.findByIdAndUpdate(req.body.listID);
     editList.name = req.body.name;
     await editList.save();
-    await console.log(editList);
+    // await console.log(editList);
     res.status(200).json({messgae: 'Successfull!'})
 })
 
+//Create List
 router.post('/create', async (req, res) => {
-  console.log(req.session);
   try {
-
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
       const createdList = await GroceryList.create(req.body);
@@ -39,35 +37,28 @@ router.post('/create', async (req, res) => {
         data: 'Log in required'
       })
     }
-
   } catch (err) {
     console.log(err);
   }
 })
 
-//change color
-// router.post('/listColor', (req, res) => {
-//   console.log(req);
-//   // try {
-//   //   if (req.session.logged) {
-//   //     req.body.createdBy = req.session.username;
-//   //     const updatedList = await GroceryList.findByIdAndUpdate(req.body);
-//   //     console.log(updatedList);
-//   //     // res.json({
-//   //     //   status: 200,
-//   //     //   data: createdList._id
-//   //     // })
-//   //   // } else {
-//   //   //   res.json({
-//   //   //     status: 200,
-//   //   //     data: 'Log in required'
-//   //   //   })
-//   //   }
-//   //
-//   // } catch (err) {
-//   //   console.log(err);
-//   // }
-// })
+//Add Category
+router.post('/addCategory', async(req, res) => {
+  console.log(req.session);
+  try {
+    let findList = await GroceryList.findById(req.body._id);
+    console.log(findList);
+    findList.category.Name = req.body.name
+    findList.save();
+    res.json({
+      status: 200,
+      data: findList
+    })
+    return
+  } catch (err) {
+    console.log(err);
+  }
+})
 
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
@@ -104,6 +95,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+//Add Item
 router.post('/addItem', async (req, res) => {
   console.log('LIST FOUND', req.body);
   try{
@@ -130,12 +122,12 @@ router.post('/addItem', async (req, res) => {
   }
 })
 
+//Find List
 router.get('/findLists', async (req, res) => {
   console.log(req.session, 'IT WORKS ')
   try {
 
     if (req.session.logged) {
-      console.log('poop');
       const foundLists = await GroceryList.find({createdBy: req.session.username});
       console.log(foundLists);
       res.json({
@@ -154,6 +146,7 @@ router.get('/findLists', async (req, res) => {
   }
 })
 
+//Get List ID
 router.get('/:id', async (req, res) => {
   console.log(req.params.id, 'get list request');
   try {
