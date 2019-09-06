@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const GroceryListSchema = new mongoose.Schema({
   name: String,
-  category: [
+  categories: [
     { name: String, items: [] }
   ],
   produce: [],

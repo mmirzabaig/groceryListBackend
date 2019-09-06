@@ -44,12 +44,14 @@ router.post('/create', async (req, res) => {
 
 //Add Category
 router.post('/addCategory', async(req, res) => {
-  console.log(req.session);
+  // console.log(req.session);
+  console.log(req.body.list);
   try {
-    let findList = await GroceryList.findById(req.body._id);
+    let findList = await GroceryList.findById(req.body.id);
+    await console.log(findList);
     let category = {name: req.body.name, items: []}
     console.log(findList);
-    findList.category.push(category);
+    findList.categories.push(category);
     findList.save();
     res.json({
       status: 200,
