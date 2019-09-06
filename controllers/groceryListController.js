@@ -47,8 +47,9 @@ router.post('/addCategory', async(req, res) => {
   console.log(req.session);
   try {
     let findList = await GroceryList.findById(req.body._id);
+    let category = {name: req.body.name, items: []}
     console.log(findList);
-    findList.category.Name = req.body.name
+    findList.category.push(category);
     findList.save();
     res.json({
       status: 200,
