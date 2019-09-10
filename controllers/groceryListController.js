@@ -29,7 +29,7 @@ router.post('/create', async (req, res) => {
       console.log(createdList);
       res.json({
         status: 200,
-        data: createdList._id
+        data: createdList
       })
     } else {
       res.json({
