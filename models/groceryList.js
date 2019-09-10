@@ -5,16 +5,6 @@ const GroceryListSchema = new mongoose.Schema({
   categories: [
     { name: String, items: [] }
   ],
-  produce: [],
-  meats: [],
-  deli: [],
-  dairy: [],
-  frozen: [],
-  bakery: [],
-  general: [],
-  alcohol: [],
-  drinks: [],
-  dryGoods: [],
   createdBy: String,
   color: String
 });
