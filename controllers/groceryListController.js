@@ -67,7 +67,7 @@ router.post('/addCategory', async(req, res) => {
 router.post('/deleteCategory', async (req, res) => {
   try {
     const deletedCategory = await GroceryList.findByIdAndRemove(req.body.id);
-    res.json({
+    await res.json({
       status: 200,
       data: deletedCategory
     });
