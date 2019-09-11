@@ -63,6 +63,19 @@ router.post('/addCategory', async(req, res) => {
   }
 })
 
+//Delete Category
+router.post('/deleteCategory', async (req, res) => {
+  try {
+    const deletedCategory = await GroceryList.findByIdAndRemove(req.body.id);
+    await res.json({
+      status: 200,
+      data: deletedCategory
+    });
+  } catch (err) {
+    res.send(err)
+  }
+})
+
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
   console.log(req.body, 'MIRZA')
@@ -92,7 +105,6 @@ router.delete('/:id', async (req, res) => {
             status: 200,
             data: deletedList
           });
-
   } catch(err){
     res.send(err);
   }
