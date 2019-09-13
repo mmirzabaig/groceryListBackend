@@ -66,7 +66,16 @@ router.post('/addCategory', async(req, res) => {
 //Delete Category
 router.post('/deleteCategory', async (req, res) => {
   try {
-    const deletedCategory = await GroceryList.findByIdAndRemove(req.body.id);
+    console.log('hey', req.body.name);
+    const deletedCategory = await GroceryList.findOneAndUpdate({name: req.body.name});
+    await console.log(deletedCategory);
+    await deletedCategory.categories.forEach((item, index) => {
+      if (item.name === req.body.category) {
+        deletedCategory.categories.splice(index, 1);
+      }
+    });
+    await console.log(deletedCategory, 'updated List');
+    await deletedCategory.save();
     await res.json({
       status: 200,
       data: deletedCategory
@@ -97,7 +106,7 @@ router.post('/deleteItem', async (req, res) => {
 
 // Delete List
 router.delete('/:id', async (req, res) => {
-  console.log(req.params.id, '1g23456789');
+  //console.log(req.params.id, '1g23456789');
   try {
      const deletedList = await GroceryList.findByIdAndRemove(req.params.id);
      console.log(deletedList, ' this is deleted');
@@ -116,18 +125,18 @@ router.post('/addItem', async (req, res) => {
   try{
     const findList = await GroceryList.findById(req.body._id);
     console.log(findList, 'LIST FOUND')
-    const a = req.body;
-    const b = findList;
-    for (let i in b) {
-      if (a.category === i && !b[i].includes(a.name)) {
-        console.log(b[i].includes('Pete'));
-        console.log(b[i], 'MIRZA');
-        b[i].push(a.name)
-        console.log(b);
-        b.save();
-        return b;
-      }
-    }
+    // const a = req.body;
+    // const b = findList;
+    // for (let i in b) {
+    //   if (a.category === i && !b[i].includes(a.name)) {
+    //     console.log(b[i].includes('Pete'));
+    //     console.log(b[i], 'MIRZA');
+    //     b[i].push(a.name)
+    //     console.log(b);
+    //     b.save();
+    //     return b;
+    //   }
+    // }
     res.json({
       status: 200,
       data: 'added Item'

@@ -22,8 +22,8 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const corsOptions = {
   origin: 'http://localhost:3000',
