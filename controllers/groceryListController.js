@@ -26,7 +26,6 @@ router.post('/create', async (req, res) => {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
       const createdList = await GroceryList.create(req.body);
-      console.log(createdList);
       res.json({
         status: 200,
         data: createdList
@@ -44,13 +43,10 @@ router.post('/create', async (req, res) => {
 
 //Add Category
 router.post('/addCategory', async(req, res) => {
-  // console.log(req.session);
-  console.log(req.body.list);
   try {
     let findList = await GroceryList.findById(req.body.id);
-    await console.log(findList);
+    // await console.log(findList);
     let category = {name: req.body.name, items: []}
-    console.log(findList);
     findList.categories.push(category);
     findList.save();
     res.json({
@@ -66,15 +62,14 @@ router.post('/addCategory', async(req, res) => {
 //Delete Category
 router.post('/deleteCategory', async (req, res) => {
   try {
-    console.log('hey', req.body.name);
     const deletedCategory = await GroceryList.findOneAndUpdate({name: req.body.name});
-    await console.log(deletedCategory);
+    // await console.log(deletedCategory);
     await deletedCategory.categories.forEach((item, index) => {
       if (item.name === req.body.category) {
         deletedCategory.categories.splice(index, 1);
       }
     });
-    await console.log(deletedCategory, 'updated List');
+    // await console.log(deletedCategory, 'updated List');
     await deletedCategory.save();
     await res.json({
       status: 200,
@@ -86,23 +81,22 @@ router.post('/deleteCategory', async (req, res) => {
 })
 
 //Delete Item
-router.post('/deleteItem', async (req, res) => {
-  console.log(req.body, 'MIRZA')
-  try {
-    const deleteItem = await GroceryList.findById(req.body.id);
-    console.log(deleteItem, 'Delete Item LIST Found ')
-    for (let key in deleteItem) {
-      if(key === req.body.category) {
-        let index = deleteItem[key].indexOf(req.body.item);
-        deleteItem[key].splice(index, 1);
-        deleteItem.save();
-        console.log(deleteItem);
-      }
-    }
-  } catch (err) {
-    console.log(err.message)
-  }
-})
+// router.post('/deleteItem', async (req, res) => {
+//   console.log(req.body, 'MIRZA')
+//   try {
+//     const deleteItem = await GroceryList.findById(req.body.id);
+//     console.log(deleteItem, 'Delete Item LIST Found ')
+//     for (let key in deleteItem) {
+//       if(key === req.body.category) {
+//         let index = deleteItem[key].indexOf(req.body.item);
+//         deleteItem[key].splice(index, 1);
+//         deleteItem.save();
+//       }
+//     }
+//   } catch (err) {
+//     console.log(err.message)
+//   }
+// })
 
 // Delete List
 router.delete('/:id', async (req, res) => {
@@ -124,19 +118,19 @@ router.post('/addItem', async (req, res) => {
   console.log('LIST FOUND', req.body);
   try{
     const findList = await GroceryList.findById(req.body._id);
-    console.log(findList, 'LIST FOUND')
-    // const a = req.body;
-    // const b = findList;
-    // for (let i in b) {
-    //   if (a.category === i && !b[i].includes(a.name)) {
-    //     console.log(b[i].includes('Pete'));
-    //     console.log(b[i], 'MIRZA');
-    //     b[i].push(a.name)
-    //     console.log(b);
-    //     b.save();
-    //     return b;
-    //   }
-    // }
+    // console.log(findList, 'LIST FOUND')
+    const data = req.body;
+    const list = findList;
+    for (let i in list) {
+      if (data.categories === i && !list[i].includes(data.name)) {
+        // console.log(list[i].includes('Pete'));
+        // console.log(list[i], 'MIRZA');
+        list.categories[i].push(data.name)
+        console.log(list);
+        list.save();
+        return list;
+      }
+    }
     res.json({
       status: 200,
       data: 'added Item'
