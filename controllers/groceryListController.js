@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
+var ObjectID = require('mongodb').ObjectID;   
 
 //Create List Color
 router.post('/listcolor', async (req, res) => {
@@ -22,6 +23,7 @@ router.post('/edit', async(req, res) => {
 
 //Create List
 router.post('/create', async (req, res) => {
+  console.log(req.body, '!@#!@!@#!@#!#@!@#')
   try {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
@@ -29,7 +31,7 @@ router.post('/create', async (req, res) => {
       console.log(createdList);
       res.json({
         status: 200,
-        data: createdList._id
+        data: createdList
       })
     } else {
       res.json({
@@ -62,6 +64,22 @@ router.post('/addCategory', async(req, res) => {
     console.log(err);
   }
 })
+
+//Delete Category
+// router.post('/deleteCategory/:id', async (req, res) => {
+//   console.log(req.body)
+//   const list = await GroceryList.findById(new ObjectID(req.params.id))
+  
+//   // User.findOne({ _id: '55822f34a8394683dd015888' });
+//   await console.log(list, 'delete Category')
+//   console.log(list, 'list')
+
+//   setTimeout(() => {
+//     console.log(list, 'list2000')
+
+//   },2000)
+// })
+
 
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
@@ -154,6 +172,7 @@ router.get('/:id', async (req, res) => {
   console.log(req.params.id, 'get list request');
   try {
     const getList = await GroceryList.findById(req.params.id)
+    console.log(getList, 'getList')
     res.json({
       status: 200,
       data: getList,
