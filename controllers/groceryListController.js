@@ -117,12 +117,12 @@ router.delete('/:id', async (req, res) => {
 router.post('/addItem', async (req, res) => {
   console.log('LIST FOUND', req.body);
   try{
-    const findList = await GroceryList.findById(req.body._id);
-    // console.log(findList, 'LIST FOUND')
+    const findList = await GroceryList.findByIdAndUpdate(req.body._id);
+    console.log(findList, 'LIST FOUND')
     const data = req.body;
-    const list = findList;
-    for (let i in list) {
-      if (data.categories === i && !list[i].includes(data.name)) {
+    const list = data.categories;
+    for (let i of data.categories) {
+      if (data.categories.name === i.name && !list[i].includes(data.name)) {
         // console.log(list[i].includes('Pete'));
         // console.log(list[i], 'MIRZA');
         list.categories[i].push(data.name)
