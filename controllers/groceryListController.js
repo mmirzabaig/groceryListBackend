@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
+var ObjectID = require('mongodb').ObjectID;
 
 //Create List Color
 router.post('/listcolor', async (req, res) => {
@@ -22,6 +23,7 @@ router.post('/edit', async(req, res) => {
 
 //Create List
 router.post('/create', async (req, res) => {
+  console.log(req.body, '!@#!@!@#!@#!#@!@#')
   try {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
@@ -43,9 +45,9 @@ router.post('/create', async (req, res) => {
 
 //Add Category
 router.post('/addCategory', async(req, res) => {
+  console.log(req.body, 'BODY')
   try {
-    let findList = await GroceryList.findById(req.body.id);
-    // await console.log(findList);
+    let findList = await GroceryList.findByIdAndUpdate(req.body.id);
     let category = {name: req.body.name, items: []}
     findList.categories.push(category);
     findList.save();
@@ -108,6 +110,7 @@ router.delete('/:id', async (req, res) => {
             status: 200,
             data: deletedList
           });
+
   } catch(err){
     res.send(err);
   }
@@ -115,25 +118,45 @@ router.delete('/:id', async (req, res) => {
 
 //Add Item
 router.post('/addItem', async (req, res) => {
+
   console.log('LIST FOUND', req.body);
   try{
-    const findList = await GroceryList.findByIdAndUpdate(req.body._id);
-    console.log(findList, 'LIST FOUND')
-    const data = req.body;
-    const list = data.categories;
-    for (let i of data.categories) {
-      if (data.categories.name === i.name && !list[i].includes(data.name)) {
-        // console.log(list[i].includes('Pete'));
-        // console.log(list[i], 'MIRZA');
-        list.categories[i].push(data.name)
-        console.log(list);
-        list.save();
-        return list;
+    const findList = await GroceryList.findByIdAndUpdate(req.body.listID);
+    await console.log(findList, 'list')
+
+    findList.categories.map((item) => {
+
+      console.log(item, 'ITEMITEM')
+      console.log(req.body.categoryID, 'CATEGORYID')
+
+      console.log(item._id === req.body.categoryID, '--------')
+      console.log(item._id.equals(req.body.categoryID), '6789o9876789')
+
+      if (item._id.equals(req.body.categoryID)) {
+
+        console.log('1212')
+        item.items.push(req.body.item);
+        console.log(item, 'ADDED ITEM')
       }
-    }
+    })
+
+    findList.save();
+    // console.log(findList, 'LIST FOUND')
+    // const data = req.body;
+    // const list = findList;
+    // for (let i in list) {
+    //   if (data.categories === i && !list[i].includes(data.name)) {
+    //     // console.log(list[i].includes('Pete'));
+    //     // console.log(list[i], 'MIRZA');
+    //     list.categories[i].push(data.name)
+    //     console.log(list);
+    //     list.save();
+    //     return list;
+    //   }
+    // }
     res.json({
       status: 200,
-      data: 'added Item'
+      data: findList
     })
   } catch(err) {
     console.log(err)
@@ -169,6 +192,7 @@ router.get('/:id', async (req, res) => {
   console.log(req.params.id, 'get list request');
   try {
     const getList = await GroceryList.findById(req.params.id)
+    console.log(getList, 'getList')
     res.json({
       status: 200,
       data: getList,

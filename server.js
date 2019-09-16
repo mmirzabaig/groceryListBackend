@@ -5,6 +5,8 @@ const session = require('express-session');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const GroceryList = require('./models/groceryList');
+
 
 require('./db/db');
 require('./config/passport');
@@ -37,6 +39,36 @@ app.use(cors(corsOptions));
 
 app.use('/auth', authController);
 app.use('/', groceryListController);
+
+// app.post('/deleteCategory/:id', async (req, res) => {
+//   console.log(req.body)
+//   const list = await GroceryList.findById(req.params.id)
+  
+//   // User.findOne({ _id: '55822f34a8394683dd015888' });
+//   await console.log(list, 'delete Category')
+//   console.log(list, 'list')
+
+//   setTimeout(() => {
+//     console.log(list, 'list2000')
+
+//   },2000)
+// })
+
+app.post('/deleteCategory/:id', async (req, res) => {
+  console.log(req.params.id, 'get list request');
+  let id = req.params.id;
+  try {
+    const getList = await GroceryList.findOne({_id: id})
+    console.log(getList, 'getList')
+    res.json({
+      status: 200,
+      data: getList,
+    })
+  } catch(err) {
+    console.log(err);
+  }
+})
+
 
 
 

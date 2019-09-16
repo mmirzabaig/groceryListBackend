@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const connectionString = 'mongodb://localhost/groceryList';
+const connectionString = 'mongodb://localhost/groceryList1';
 
 
 mongoose.connect(connectionString, { useNewUrlParser: true });
