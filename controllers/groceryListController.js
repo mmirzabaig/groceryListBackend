@@ -82,6 +82,43 @@ router.post('/deleteCategory', async (req, res) => {
   }
 })
 
+// Delete List
+router.delete('/:id', async (req, res) => {
+  //console.log(req.params.id, '1g23456789');
+  try {
+     const deletedList = await GroceryList.findByIdAndRemove(req.params.id);
+     console.log(deletedList, ' this is deleted');
+     res.json({
+            status: 200,
+            data: deletedList
+          });
+  } catch(err){
+    res.send(err);
+  }
+});
+
+//Add Item
+router.post('/addItem', async (req, res) => {
+
+  console.log('LIST FOUND', req.body);
+  try{
+    const findList = await GroceryList.findByIdAndUpdate(req.body.listID);
+    await console.log(findList, 'list')
+    findList.categories.map((item) => {
+      if (item._id.equals(req.body.categoryID)) {
+        item.items.push(req.body.item);
+      }
+    })
+    findList.save();
+    res.json({
+      status: 200,
+      data: findList
+    })
+  } catch(err) {
+    console.log(err)
+  }
+})
+
 //Delete Item
 // router.post('/deleteItem', async (req, res) => {
 //   console.log(req.body, 'MIRZA')
@@ -99,69 +136,6 @@ router.post('/deleteCategory', async (req, res) => {
 //     console.log(err.message)
 //   }
 // })
-
-// Delete List
-router.delete('/:id', async (req, res) => {
-  //console.log(req.params.id, '1g23456789');
-  try {
-     const deletedList = await GroceryList.findByIdAndRemove(req.params.id);
-     console.log(deletedList, ' this is deleted');
-     res.json({
-            status: 200,
-            data: deletedList
-          });
-
-  } catch(err){
-    res.send(err);
-  }
-});
-
-//Add Item
-router.post('/addItem', async (req, res) => {
-
-  console.log('LIST FOUND', req.body);
-  try{
-    const findList = await GroceryList.findByIdAndUpdate(req.body.listID);
-    await console.log(findList, 'list')
-
-    findList.categories.map((item) => {
-
-      console.log(item, 'ITEMITEM')
-      console.log(req.body.categoryID, 'CATEGORYID')
-
-      console.log(item._id === req.body.categoryID, '--------')
-      console.log(item._id.equals(req.body.categoryID), '6789o9876789')
-
-      if (item._id.equals(req.body.categoryID)) {
-
-        console.log('1212')
-        item.items.push(req.body.item);
-        console.log(item, 'ADDED ITEM')
-      }
-    })
-
-    findList.save();
-    // console.log(findList, 'LIST FOUND')
-    // const data = req.body;
-    // const list = findList;
-    // for (let i in list) {
-    //   if (data.categories === i && !list[i].includes(data.name)) {
-    //     // console.log(list[i].includes('Pete'));
-    //     // console.log(list[i], 'MIRZA');
-    //     list.categories[i].push(data.name)
-    //     console.log(list);
-    //     list.save();
-    //     return list;
-    //   }
-    // }
-    res.json({
-      status: 200,
-      data: findList
-    })
-  } catch(err) {
-    console.log(err)
-  }
-})
 
 //Find List
 router.get('/findLists', async (req, res) => {
