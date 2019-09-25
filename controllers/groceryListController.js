@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
 var ObjectID = require('mongodb').ObjectID;
+var mongoose = require('mongoose');
 
 //Create List Color
 router.post('/listcolor', async (req, res) => {
@@ -27,7 +28,19 @@ router.post('/create', async (req, res) => {
   try {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
-      const createdList = await GroceryList.create(req.body);
+      let createdList = await GroceryList.create(req.body);
+      let test = createdList._id.toString();
+      // console.log(typeof(test));
+      let updateID = await GroceryList.findByIdAndUpdate(createdList._id)
+      let stringID = updateID._id.toString();
+      // console.log('BEFORE', updateID);
+      updateID._id = stringID;
+      // console.log(stringID, typeof(stringID), '123')
+      updateID.id = stringID;
+      // console.log(updateID, 'update id')
+      updateID.save();
+      // console.log('SAVED ONE', updateID);
+      console.log(typeof(updateID._id))
       res.json({
         status: 200,
         data: createdList
@@ -49,6 +62,7 @@ router.post('/addCategory', async(req, res) => {
   try {
     let findList = await GroceryList.findByIdAndUpdate(req.body.id);
     let category = {name: req.body.name, items: []}
+    console.log(findList);
     findList.categories.push(category);
     findList.save();
     res.json({
@@ -63,23 +77,28 @@ router.post('/addCategory', async(req, res) => {
 
 //Delete Category
 router.post('/deleteCategory', async (req, res) => {
-  try {
-    const deletedCategory = await GroceryList.findOneAndUpdate({name: req.body.name});
-    // await console.log(deletedCategory);
-    await deletedCategory.categories.forEach((item, index) => {
-      if (item.name === req.body.category) {
-        deletedCategory.categories.splice(index, 1);
-      }
-    });
-    // await console.log(deletedCategory, 'updated List');
-    await deletedCategory.save();
-    await res.json({
-      status: 200,
-      data: deletedCategory
-    });
-  } catch (err) {
-    res.send(err)
-  }
+  console.log(req.body);
+  // try {
+    // var objectId = mongoose.Types.ObjectId(req.body.id);
+    // console.log(typeof(objectId));
+    // console.log(objectId);
+    // console.log(typeof(req.body.id));
+    const deletedCategory = await GroceryList.findByIdAndUpdate(req.body.id);
+    console.log(deletedCategory);
+  //   await deletedCategory.categories.forEach((item, index) => {
+  //     if (item.name === req.body.category) {
+  //       deletedCategory.categories.splice(index, 1);
+  //     }
+  //   });
+  //   // await console.log(deletedCategory, 'updated List');
+  //   await deletedCategory.save();
+  //   await res.json({
+  //     status: 200,
+  //     data: deletedCategory
+  //   });
+  // } catch (err) {
+  //   res.send(err)
+  // }
 })
 
 // Delete List
