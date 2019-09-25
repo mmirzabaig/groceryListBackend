@@ -64,8 +64,8 @@ router.post('/addCategory', async(req, res) => {
 //Delete Category
 router.post('/deleteCategory', async (req, res) => {
   try {
-    const deletedCategory = await GroceryList.findOneAndUpdate({name: req.body.name});
-    // await console.log(deletedCategory);
+    const deletedCategory = await GroceryList.findByIdAndUpdate(req.body.listID);
+    await console.log(deletedCategory, '45678987');
     await deletedCategory.categories.forEach((item, index) => {
       if (item.name === req.body.category) {
         deletedCategory.categories.splice(index, 1);
