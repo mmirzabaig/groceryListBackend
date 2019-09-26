@@ -29,18 +29,6 @@ router.post('/create', async (req, res) => {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
       let createdList = await GroceryList.create(req.body);
-      let test = createdList._id.toString();
-      // console.log(typeof(test));
-      let updateID = await GroceryList.findByIdAndUpdate(createdList._id)
-      let stringID = updateID._id.toString();
-      // console.log('BEFORE', updateID);
-      updateID._id = stringID;
-      // console.log(stringID, typeof(stringID), '123')
-      updateID.id = stringID;
-      // console.log(updateID, 'update id')
-      updateID.save();
-      // console.log('SAVED ONE', updateID);
-      console.log(typeof(updateID._id))
       res.json({
         status: 200,
         data: createdList
@@ -77,28 +65,23 @@ router.post('/addCategory', async(req, res) => {
 
 //Delete Category
 router.post('/deleteCategory', async (req, res) => {
-  console.log(req.body);
-  // try {
-    // var objectId = mongoose.Types.ObjectId(req.body.id);
-    // console.log(typeof(objectId));
-    // console.log(objectId);
-    // console.log(typeof(req.body.id));
-    const deletedCategory = await GroceryList.findByIdAndUpdate(req.body.id);
-    console.log(deletedCategory);
-  //   await deletedCategory.categories.forEach((item, index) => {
-  //     if (item.name === req.body.category) {
-  //       deletedCategory.categories.splice(index, 1);
-  //     }
-  //   });
-  //   // await console.log(deletedCategory, 'updated List');
-  //   await deletedCategory.save();
-  //   await res.json({
-  //     status: 200,
-  //     data: deletedCategory
-  //   });
-  // } catch (err) {
-  //   res.send(err)
-  // }
+  try {
+    const deletedCategory = await GroceryList.findByIdAndUpdate(req.body.listID);
+    await console.log(deletedCategory, '45678987');
+    await deletedCategory.categories.forEach((item, index) => {
+      if (item.name === req.body.category) {
+        deletedCategory.categories.splice(index, 1);
+      }
+    });
+    // await console.log(deletedCategory, 'updated List');
+    await deletedCategory.save();
+    await res.json({
+      status: 200,
+      data: deletedCategory
+    });
+  } catch (err) {
+    res.send(err)
+  }
 })
 
 // Delete List
@@ -139,22 +122,22 @@ router.post('/addItem', async (req, res) => {
 })
 
 //Delete Item
-// router.post('/deleteItem', async (req, res) => {
-//   console.log(req.body, 'MIRZA')
-//   try {
-//     const deleteItem = await GroceryList.findById(req.body.id);
-//     console.log(deleteItem, 'Delete Item LIST Found ')
-//     for (let key in deleteItem) {
-//       if(key === req.body.category) {
-//         let index = deleteItem[key].indexOf(req.body.item);
-//         deleteItem[key].splice(index, 1);
-//         deleteItem.save();
-//       }
-//     }
-//   } catch (err) {
-//     console.log(err.message)
-//   }
-// })
+router.post('/deleteItem', async (req, res) => {
+  console.log(req.body, 'MIRZA')
+  try {
+    const deleteItem = await GroceryList.findByIdAndUpdate(req.body.id);
+    console.log(deleteItem, 'Delete Item LIST Found ')
+    for (let key of deleteItem.categories) {
+      if(key._id === req.body.category) {
+        let index = deleteItem[key].indexOf(req.body.item);
+        deleteItem[key].splice(index, 1);
+        deleteItem.save();
+      }
+    }
+  } catch (err) {
+    console.log(err.message)
+  }
+})
 
 //Find List
 router.get('/findLists', async (req, res) => {
