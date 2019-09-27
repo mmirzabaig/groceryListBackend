@@ -125,15 +125,14 @@ router.post('/addItem', async (req, res) => {
 router.post('/deleteItem', async (req, res) => {
   console.log(req.body, 'MIRZA')
   try {
-    const deleteItem = await GroceryList.findByIdAndUpdate(req.body.id);
+    let {item, list, catId, categoryIndex, categoryItemIndex, categories} = req.body
+    const deleteItem = await GroceryList.findByIdAndUpdate(list);
     console.log(deleteItem, 'Delete Item LIST Found ')
-    for (let key of deleteItem.categories) {
-      if(key._id === req.body.category) {
-        let index = deleteItem[key].indexOf(req.body.item);
-        deleteItem[key].splice(index, 1);
-        deleteItem.save();
-      }
-    }
+    await deleteItem.categories[categoryIndex].items.splice(categoryItemIndex, 1);
+    console.log('hello', deleteItem.categories[categoryIndex]);
+    await deleteItem.save();
+    await console.log(deleteItem);
+
   } catch (err) {
     console.log(err.message)
   }
