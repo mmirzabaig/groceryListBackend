@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
 var ObjectID = require('mongodb').ObjectID;
+var mongoose = require('mongoose');
 
 //Create List Color
 router.post('/listcolor', async (req, res) => {
@@ -27,7 +28,7 @@ router.post('/create', async (req, res) => {
   try {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
-      const createdList = await GroceryList.create(req.body);
+      let createdList = await GroceryList.create(req.body);
       res.json({
         status: 200,
         data: createdList
@@ -49,6 +50,7 @@ router.post('/addCategory', async(req, res) => {
   try {
     let findList = await GroceryList.findByIdAndUpdate(req.body.id);
     let category = {name: req.body.name, items: []}
+    console.log(findList);
     findList.categories.push(category);
     findList.save();
     res.json({
@@ -120,22 +122,21 @@ router.post('/addItem', async (req, res) => {
 })
 
 //Delete Item
-// router.post('/deleteItem', async (req, res) => {
-//   console.log(req.body, 'MIRZA')
-//   try {
-//     const deleteItem = await GroceryList.findById(req.body.id);
-//     console.log(deleteItem, 'Delete Item LIST Found ')
-//     for (let key in deleteItem) {
-//       if(key === req.body.category) {
-//         let index = deleteItem[key].indexOf(req.body.item);
-//         deleteItem[key].splice(index, 1);
-//         deleteItem.save();
-//       }
-//     }
-//   } catch (err) {
-//     console.log(err.message)
-//   }
-// })
+router.post('/deleteItem', async (req, res) => {
+  console.log(req.body, 'MIRZA')
+  try {
+    let {item, list, catId, categoryIndex, categoryItemIndex, categories} = req.body
+    const deleteItem = await GroceryList.findByIdAndUpdate(list);
+    console.log(deleteItem, 'Delete Item LIST Found ')
+    await deleteItem.categories[categoryIndex].items.splice(categoryItemIndex, 1);
+    console.log('hello', deleteItem.categories[categoryIndex]);
+    await deleteItem.save();
+    await console.log(deleteItem);
+
+  } catch (err) {
+    console.log(err.message)
+  }
+})
 
 //Find List
 router.get('/findLists', async (req, res) => {
