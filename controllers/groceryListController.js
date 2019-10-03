@@ -109,12 +109,12 @@ router.post('/addItem', async (req, res) => {
     findList.categories.map((item) => {
       if (item._id.equals(req.body.categoryID)) {
         item.items.push(req.body.item);
+        findList.save();
+        res.json({
+          status: 200,
+          data: item
+        })
       }
-    })
-    findList.save();
-    res.json({
-      status: 200,
-      data: findList
     })
   } catch(err) {
     console.log(err)
@@ -123,16 +123,12 @@ router.post('/addItem', async (req, res) => {
 
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
-  console.log(req.body, 'MIRZA')
+  console.log(req.body, 'data')
   try {
     let {item, list, catId, categoryIndex, categoryItemIndex, categories} = req.body
     const deleteItem = await GroceryList.findByIdAndUpdate(list);
-    console.log(deleteItem, 'Delete Item LIST Found ')
     await deleteItem.categories[categoryIndex].items.splice(categoryItemIndex, 1);
-    console.log('hello', deleteItem.categories[categoryIndex]);
     await deleteItem.save();
-    await console.log(deleteItem);
-
   } catch (err) {
     console.log(err.message)
   }
