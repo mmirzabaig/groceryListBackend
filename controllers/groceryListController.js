@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
+const User = require('../models/user');
 var ObjectID = require('mongodb').ObjectID;
 var mongoose = require('mongoose');
 
@@ -101,38 +102,75 @@ router.delete('/:id', async (req, res) => {
 
 //Add Item
 router.post('/addItem', async (req, res) => {
-
-  console.log('LIST FOUND', req.body);
+  console.log('addItem')
+  // console.log('LIST FOUND', req.body);
   try{
     const findList = await GroceryList.findByIdAndUpdate(req.body.listID);
-    await console.log(findList, 'list')
-    findList.categories.map((item) => {
-      if (item._id.equals(req.body.categoryID)) {
-        item.items.push(req.body.item);
-      }
-    })
-    findList.save();
-    res.json({
-      status: 200,
-      data: findList
-    })
+
+    let item = findList.categories[req.body.categoryIndex];
+    await item.items.push(req.body.item);
+    await findList.save();
+    await res.json({
+              status: 200,
+              data: item
+          })
   } catch(err) {
     console.log(err)
   }
 })
 
+// Collaborators 
+router.post('/collab', async (req, res) => {
+  console.log(req.body, '1212')
+  try{
+    const findUser = await User.find({username: req.body.name});
+
+    // let item = findList.categories[req.body.categoryIndex];
+    // await item.items.push(req.body.item);
+    // await findList.save();
+    await res.json({
+              status: 200,
+              data: findUser
+          })
+  } catch(err) {
+    console.log(err)
+  }
+})
+
+router.post('/confirmCollab', async (req, res) => {
+  console.log(req.body, '1212')
+  try{
+    const findUser = await User.findOne({username: req.body.username});
+    // await console.log(findUser, '1221')
+    await findUser.collabs.push(req.body.listID);
+    await findUser.save();
+    await console.log(findUser, '1221')
+
+    // let item = findList.categories[req.body.categoryIndex];
+    // await item.items.push(req.body.item);
+    // await findList.save();
+    await res.json({
+              status: 200,
+              data: findUser
+          })
+  } catch(err) {
+    console.log(err)
+  }
+})
+
+
 //Delete Item
 router.post('/deleteItem', async (req, res) => {
-  console.log(req.body, 'MIRZA')
+  console.log('Delete item')
   try {
     let {item, list, catId, categoryIndex, categoryItemIndex, categories} = req.body
     const deleteItem = await GroceryList.findByIdAndUpdate(list);
-    console.log(deleteItem, 'Delete Item LIST Found ')
     await deleteItem.categories[categoryIndex].items.splice(categoryItemIndex, 1);
-    console.log('hello', deleteItem.categories[categoryIndex]);
     await deleteItem.save();
-    await console.log(deleteItem);
-
+    await res.json({
+      status: 200,
+      data: deleteItem.categories[categoryIndex]
+    })
   } catch (err) {
     console.log(err.message)
   }
@@ -167,7 +205,7 @@ router.get('/:id', async (req, res) => {
   console.log(req.params.id, 'get list request');
   try {
     const getList = await GroceryList.findById(req.params.id)
-    console.log(getList, 'getList')
+    // console.log(getList, 'getList')
     res.json({
       status: 200,
       data: getList,
