@@ -178,16 +178,23 @@ router.post('/deleteItem', async (req, res) => {
 
 //Find List
 router.get('/findLists', async (req, res) => {
-  console.log(req.session, 'IT WORKS ')
+  // console.log(req.session, 'IT WORKS ')
   try {
 
     if (req.session.logged) {
       const foundLists = await GroceryList.find({createdBy: req.session.username});
-      console.log(foundLists);
-      res.json({
-        status: 200,
-        data: foundLists
-      })
+      const foundUser = await User.findOne({username: req.session.username})
+      .populate('collabs')
+      .exec((err, lists) =>  {
+        if (err) return handleError(err);
+        console.log(lists, 'iuy8');
+        const data = {foundLists: foundLists, foundCollabs: lists.collabs}
+        res.json({
+          status: 200,
+          data: data
+        })
+      });
+
     } else {
       res.json({
         status: 200,
