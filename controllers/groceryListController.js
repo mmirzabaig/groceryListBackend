@@ -119,7 +119,7 @@ router.post('/addItem', async (req, res) => {
   }
 })
 
-// Collaborators 
+// Collaborators
 router.post('/collab', async (req, res) => {
   console.log(req.body, '1212')
   try{
@@ -188,7 +188,7 @@ router.get('/findLists', async (req, res) => {
       .exec((err, lists) =>  {
         if (err) return handleError(err);
         console.log(lists, 'iuy8');
-        const data = {foundLists: foundLists, foundCollabs: lists.collabs}
+        const data = {foundLists: foundLists, foundCollabs: lists.collabs, username: req.session.username}
         res.json({
           status: 200,
           data: data
