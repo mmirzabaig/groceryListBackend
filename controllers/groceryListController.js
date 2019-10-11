@@ -154,7 +154,10 @@ router.post('/confirmCollab', async (req, res) => {
     // await findList.save();
     await res.json({
               status: 200,
-              data: findUser
+              data: {
+                user: findUser,
+                list: findList
+              }
           })
   } catch(err) {
     console.log(err)
