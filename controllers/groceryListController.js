@@ -119,7 +119,7 @@ router.post('/addItem', async (req, res) => {
   }
 })
 
-// Collaborators 
+// Collaborators
 router.post('/collab', async (req, res) => {
   console.log(req.body, '1212')
   try{
@@ -140,8 +140,11 @@ router.post('/collab', async (req, res) => {
 router.post('/confirmCollab', async (req, res) => {
   console.log(req.body, '1212')
   try{
-    const findUser = await User.findOne({username: req.body.username});
+    const findUser = await User.findOneAndUpdate({username: req.body.username});
     // await console.log(findUser, '1221')
+    const findList = await GroceryList.findByIdAndUpdate(req.body.listID);
+    await findList.collabs.push(req.body.username)
+    await findList.save();
     await findUser.collabs.push(req.body.listID);
     await findUser.save();
     await console.log(findUser, '1221')
@@ -188,7 +191,7 @@ router.get('/findLists', async (req, res) => {
       .exec((err, lists) =>  {
         if (err) return handleError(err);
         console.log(lists, 'iuy8');
-        const data = {foundLists: foundLists, foundCollabs: lists.collabs}
+        const data = {foundLists: foundLists, foundCollabs: lists.collabs, username: req.session.username}
         res.json({
           status: 200,
           data: data
@@ -212,7 +215,7 @@ router.get('/:id', async (req, res) => {
   console.log(req.params.id, 'get list request');
   try {
     const getList = await GroceryList.findById(req.params.id)
-    // console.log(getList, 'getList')
+    console.log(getList, 'getList')
     res.json({
       status: 200,
       data: getList,
