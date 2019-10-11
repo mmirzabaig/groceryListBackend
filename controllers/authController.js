@@ -35,6 +35,20 @@ router.post('/register', async (req, res) => {
 
 });
 
+router.get('/logout', async (req, res) => {
+  console.log('HELLO')
+  req.session.username = '';
+  req.session.logged = false;
+  await req.session.destroy();
+
+  await console.log(req.session, 'SESSION')
+
+  await res.json({
+    status: 200,
+    data: 'logout successful'
+  })
+})
+
 router.post('/login', async (req, res) => {
   console.log(req.body, 'this is login');
 
