@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/groceryList');
 const User = require('../models/user');
-var ObjectID = require('mongodb').ObjectID;
-var mongoose = require('mongoose');
+
 
 //Create List Color
 router.post('/listcolor', async (req, res) => {
@@ -190,16 +189,26 @@ router.get('/findLists', async (req, res) => {
     if (req.session.logged) {
       const foundLists = await GroceryList.find({createdBy: req.session.username});
       const foundUser = await User.findOne({username: req.session.username})
-      .populate('collabs')
-      .exec((err, lists) =>  {
-        if (err) return handleError(err);
-        console.log(lists, 'iuy8');
-        const data = {foundLists: foundLists, foundCollabs: lists.collabs, username: req.session.username}
-        res.json({
-          status: 200,
-          data: data
-        })
-      });
+      if (foundUser.collabs.length > 0) {
+        founUser
+        .populate('collabs')
+        .exec((err, lists) =>  {
+          if (err) return handleError(err);
+          console.log(lists, 'iuy8');
+          const data = {foundLists: foundLists, foundCollabs: lists.collabs, username: req.session.username}
+          res.json({
+            status: 200,
+            data: data
+          })
+        });
+      } else {
+        const data = {foundLists: foundLists, foundCollabs: [], username: req.session.username}
+          res.json({
+            status: 200,
+            data: data
+          })
+      }
+      
 
     } else {
       res.json({
