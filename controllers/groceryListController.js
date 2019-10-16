@@ -29,6 +29,7 @@ router.post('/create', async (req, res) => {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
       let createdList = await GroceryList.create(req.body);
+      createdList.save();
       res.json({
         status: 200,
         data: createdList
@@ -183,7 +184,7 @@ router.post('/deleteItem', async (req, res) => {
 
 //Find List
 router.get('/findLists', async (req, res) => {
-  // console.log(req.session, 'IT WORKS ')
+  console.log(req.session, 'IT WORKS ')
   try {
 
     if (req.session.logged) {
@@ -208,7 +209,7 @@ router.get('/findLists', async (req, res) => {
             data: data
           })
       }
-      
+
 
     } else {
       res.json({
