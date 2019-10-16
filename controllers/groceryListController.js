@@ -119,7 +119,7 @@ router.post('/addItem', async (req, res) => {
   }
 })
 
-// Collaborators
+// Search Collaborators
 router.post('/collab', async (req, res) => {
   console.log(req.body, '1212')
   try{
@@ -137,6 +137,7 @@ router.post('/collab', async (req, res) => {
   }
 })
 
+//Confirm Collab
 router.post('/confirmCollab', async (req, res) => {
   console.log(req.body, '1212')
   try{
@@ -186,12 +187,9 @@ router.post('/deleteItem', async (req, res) => {
 router.get('/findLists', async (req, res) => {
   console.log(req.session, 'IT WORKS ')
   try {
-
     if (req.session.logged) {
       const foundLists = await GroceryList.find({createdBy: req.session.username});
       const foundUser = await User.findOne({username: req.session.username})
-      if (foundUser.collabs.length > 0) {
-        founUser
         .populate('collabs')
         .exec((err, lists) =>  {
           if (err) return handleError(err);
@@ -202,15 +200,6 @@ router.get('/findLists', async (req, res) => {
             data: data
           })
         });
-      } else {
-        const data = {foundLists: foundLists, foundCollabs: [], username: req.session.username}
-          res.json({
-            status: 200,
-            data: data
-          })
-      }
-
-
     } else {
       res.json({
         status: 200,
