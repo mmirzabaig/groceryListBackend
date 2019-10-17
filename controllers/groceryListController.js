@@ -188,7 +188,7 @@ router.post('/deleteItem', async (req, res) => {
 router.get('/findLists', async (req, res) => {
   console.log(req.session, 'IT WORKS ')
   try {
-    if (req.session.logged) {
+    if (req.session.logged === true) {
       const foundLists = await GroceryList.find({createdBy: req.session.username});
       const foundUser = await User.findOne({username: req.session.username})
         .populate('collabs')
