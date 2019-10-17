@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
- 
+
   req.session.username = '';
   req.session.logged = false;
   await req.session.destroy();

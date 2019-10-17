@@ -30,6 +30,7 @@ router.post('/create', async (req, res) => {
     if (req.session.logged) {
       req.body.createdBy = req.session.username;
       let createdList = await GroceryList.create(req.body);
+      createdList.save();
       res.json({
         status: 200,
         data: createdList
@@ -119,12 +120,12 @@ router.post('/addItem', async (req, res) => {
   }
 })
 
-// Collaborators
+// Search Collaborators
 router.post('/collab', async (req, res) => {
-  console.log(req.body, '1212')
+  console.log(req.body, 'search collabs')
   try{
     const findUser = await User.find({username: req.body.name});
-
+    console.log(findUser, 'findUser');
     // let item = findList.categories[req.body.categoryIndex];
     // await item.items.push(req.body.item);
     // await findList.save();
@@ -137,17 +138,18 @@ router.post('/collab', async (req, res) => {
   }
 })
 
+//Confirm Collab
 router.post('/confirmCollab', async (req, res) => {
-  console.log(req.body, '1212')
+  console.log(req.body, 'confirm body')
   try{
-    const findUser = await User.findOneAndUpdate({username: req.body.username});
-    // await console.log(findUser, '1221')
+    const findUser = await User.findByIdAndUpdate(req.body.userID);
+    console.log(findUser, 'found user')
     const findList = await GroceryList.findByIdAndUpdate(req.body.listID);
     await findList.collabs.push(req.body.username)
     await findList.save();
     await findUser.collabs.push(req.body.listID);
     await findUser.save();
-    await console.log(findUser, '1221')
+    await console.log(findUser, 'confirm user')
 
     // let item = findList.categories[req.body.categoryIndex];
     // await item.items.push(req.body.item);
@@ -186,7 +188,6 @@ router.post('/deleteItem', async (req, res) => {
 router.get('/findLists', async (req, res) => {
   console.log(req.session, 'IT WORKS ')
   try {
-
     if (req.session.logged) {
       const foundLists = await GroceryList.find({createdBy: req.session.username});
       const foundUser = await User.findOne({username: req.session.username})
@@ -199,7 +200,7 @@ router.get('/findLists', async (req, res) => {
             status: 200,
             data: data
           })
-        });  
+        });
     } else {
       res.json({
         status: 200,
