@@ -203,7 +203,7 @@ router.get('/findLists', async (req, res) => {
         });
     } else {
       res.json({
-        status: 200,
+        status: 200,   
         data: 'Log in required'
       })
     }
