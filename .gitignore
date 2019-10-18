@@ -1,3 +1,6 @@
 node_modules
+node_modules/
+/node_modules
+./node_modules
 vi /Temp/.git/info/exclude
 public/images
