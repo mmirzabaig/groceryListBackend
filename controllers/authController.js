@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
 
     res.json({
       status: 200,
-      data: 'registration successful'
+      data: {result: 'registration successful', username: req.session.username}
     });
 
   } catch(err) {
@@ -67,7 +67,7 @@ router.post('/login', async (req, res) => {
 
         res.json({
           status: 200,
-          data: 'login successful'
+          data: {result: 'login successful', username: req.session.username}
         });
 
 
@@ -75,14 +75,14 @@ router.post('/login', async (req, res) => {
         console.log('login unsuccessful');
         res.json({
           status: 200,
-          data: 'login unsuccessful'
+          data: {result: 'login unsuccessful'}
         });
       }
     } else {
       console.log('login unsuccessful');
       res.json({
         status: 200,
-        data: 'login unsuccessful'
+        data: {result: 'login unsuccessful'}
       });
     }
 
