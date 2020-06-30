@@ -4,6 +4,15 @@ const GroceryList = require('../models/groceryList');
 const User = require('../models/user');
 
 
+//Test
+router.get('/test', (req, res) => {
+  res.json({
+    status: 200,
+    data: 'Hello!'
+  })
+})
+
+
 
 //Create List Color
 router.post('/listcolor', async (req, res) => {
